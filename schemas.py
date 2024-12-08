@@ -8,7 +8,7 @@ class BookSchema(Schema):
     title = fields.String(required=True, validate=validate.Length(min=1, error="Title cannot be empty"))
     author_name = fields.String(required=True, validate=validate.Length(min=1, error="Author name cannot be empty"))
     publisher_name = fields.String(required=True, validate=validate.Length(min=1, error="Publisher name cannot be empty"))
-    publication_date = fields.String(required=True, validate=validate.Length(min=1, error="Date cannot be empty"))
+    publication_date = fields.String(required=True)
 
     def validate_book(self, data):
         try:

@@ -33,8 +33,16 @@ class NotFoundError(APIError):
     def __init__(self, message="Resource not found", status_code=404):
         super().__init__(message, status_code)
 
+class InvalidDateFormatError(APIError):
+    def __init__(self, message="Invalid date format, please use yyyy-mm-dd", status_code=400):
+        super().__init__(message, status_code)
+
 class InvalidObjectIdError(APIError):
     def __init__(self, message="Invalid ObjectId format", status_code=400):
+        super().__init__(message, status_code)
+
+class DuplicationError(APIError):
+    def __init__(self, message="ISBN must be unique", status_code=400):
         super().__init__(message, status_code)
 
 class InternalServerError(APIError):

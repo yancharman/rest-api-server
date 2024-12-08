@@ -1,5 +1,9 @@
+from datetime import datetime
+
 from bson import ObjectId
 from pymongo.errors import DuplicateKeyError
+
+from errors import InvalidDateFormatError, DuplicationError
 
 
 class BookModel:
@@ -19,7 +23,11 @@ class BookModel:
 
     def create_book(self, data:dict):
         if self.get_book_by_isbn(data["isbn"]):
-            raise ValueError("ISBN must be unique")
+            raise DuplicationError()
+        try:
+            data["publication_date"] = datetime.strptime(data["publication_date"], "%Y-%m-%d")
+        except ValueError:
+            raise InvalidDateFormatError()
 
         book = {
             "isbn": data["isbn"],
@@ -36,6 +44,11 @@ class BookModel:
             raise ValueError("ISBN must be unique")
 
     def update_book(self, book_id:str, data:dict):
+        try:
+            data["publication_date"] = datetime.strptime(data["publication_date"], "%Y-%m-%d")
+        except ValueError:
+            raise InvalidDateFormatError()
+
         res = self.collection.update_one({"isbn": book_id}, {"$set": data})
         if res.matched_count > 0:
             return BookModel.get_book_by_isbn(self, data["isbn"])
